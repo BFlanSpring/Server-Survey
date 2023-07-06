@@ -16,6 +16,14 @@ def start_survey():
 @app.route("/questions/<int:question_index>", methods=['GET', 'POST'])
 def show_question(question_index):
     """Render the question form and handle form submission"""
+    if len(responses) == len(satisfaction_survey.questions):
+        return redirect(url_for('complete_survey'))
+
+    if question_index != len(responses):
+        flash('Please dont skip questions')
+        return redirect(url_for('show_question', question_index=len(responses)))
+
+
     if request.method == 'POST':
         # Save answer
         response = request.form['answer']
